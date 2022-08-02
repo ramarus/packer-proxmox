@@ -1,0 +1,52 @@
+#cloud-config (https://ubuntu.com/server/docs/install/autoinstall-reference)
+autoinstall:
+  version: 1
+  locale: en_US
+  refresh-installer:
+    update: no
+  keyboard:
+    layout: en
+  ssh:
+    install-server: true
+    allow-pw: true
+  packages:
+    - qemu-guest-agent
+    - sudo
+    - curl
+    - fail2ban
+    - htop
+    - iotop
+    - mc
+    - openntpd
+    - software-properties-common
+    - tzdata
+    - ncdu
+  storage:
+    layout:
+      name: direct
+    swap:
+      size: 0
+  # identity:
+  #   hostname: ubuntu-template
+  #   username: root
+  #   password: SuperPassword
+  user-data: # (https://cloudinit.readthedocs.io/en/latest/topics/modules.html#users-and-groups)
+    disable_root: false
+    package_upgrade: false
+    timezone: Asia/Yekaterinburg
+    users:
+      - default
+      - name: linux
+        groups: [adm, sudo]
+        lock-passwd: false
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        shell: /bin/bash
+        passwd: SuperPassword
+        # - or -
+        # ssh_authorized_keys:
+        #   - your-ssh-key
+      - name: root
+        # passwd: SuperPassword
+        # - or -
+        ssh_authorized_keys:
+          - your-ssh-key
